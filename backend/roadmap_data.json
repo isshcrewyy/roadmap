@@ -1,0 +1,8 @@
+{
+    "Physics": ["Engineering", "B.Sc. Physics", "Aerospace Science"],
+    "Chemistry": ["Chemical Engineering", "B.Sc. Chemistry", "Pharmaceutical Science"],
+    "Biology": ["Medical Science", "B.Sc. Biology", "Biotechnology"],
+    "Mathematics": ["Engineering", "B.Sc. Mathematics", "Data Science"],
+    "Computer Science": ["Software Engineering", "B.Sc. CSIT", "Cybersecurity"],
+    "Economics": ["BBA", "B.Sc. Economics", "Financial Analytics"]
+}

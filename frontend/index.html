@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Roadmap Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h1 class="text-xl font-bold mb-4 text-center">Select Your Subjects</h1>
+        <form id="roadmapForm">
+            <label class="block">
+                <input type="checkbox" name="subjects" value="Physics"> Physics
+            </label>
+            <label class="block">
+                <input type="checkbox" name="subjects" value="Chemistry"> Chemistry
+            </label>
+            <label class="block">
+                <input type="checkbox" name="subjects" value="Biology"> Biology
+            </label>
+            <label class="block">
+                <input type="checkbox" name="subjects" value="Mathematics"> Mathematics
+            </label>
+            <label class="block">
+                <input type="checkbox" name="subjects" value="Computer Science"> Computer Science
+            </label>
+           
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full">Generate Roadmap</button>
+        </form>
+
+        <div id="roadmapOutput" class="mt-4 hidden bg-gray-200 p-4 rounded"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
