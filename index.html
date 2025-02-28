@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Roadmap with Nested Nodes</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .node circle {
+            fill: steelblue;
+            stroke: white;
+            stroke-width: 2px;
+            cursor: pointer;
+        }
+        .node text {
+            font-size: 12px;
+            fill: black;
+        }
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+        }
+        #controls {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="controls">
+        <input type="text" id="nodeName" placeholder="Enter node name">
+        <button onclick="addNode()">Add Node</button>
+        <p>Click a node to select it as the parent</p>
+    </div>
+
+    <svg width="800" height="500"></svg>
+
+    <script>
+        // Initial roadmap structure
+        let data = {
+            name: "Roadmap",
+            children: []
+        };
+
+        let selectedNode = null; // Stores the currently selected node
+
+        // SVG Setup
+        const width = 800, height = 500;
+        const svg = d3.select("svg"),
+              g = svg.append("g").attr("transform", "translate(50,50)");
+
+        const treeLayout = d3.tree().size([height - 100, width - 200]);
+        let root = d3.hierarchy(data);
+
+        // Function to update the tree visualization
+        function update() {
+            treeLayout(root);
+
+            // Remove old elements
+            g.selectAll(".link").remove();
+            g.selectAll(".node").remove();
+
+            // Draw links
+            g.selectAll(".link")
+                .data(root.links())
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .x(d => d.y)
+                    .y(d => d.x)
+                );
+
+            // Draw nodes
+            const node = g.selectAll(".node")
+                .data(root.descendants())
+                .enter()
+                .append("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.y},${d.x})`)
+                .on("click", function(event, d) {
+                    event.stopPropagation(); // Prevent click event from affecting other elements
+
+                    // Toggle expansion/collapse
+                    if (d.children) {
+                        d._children = d.children;
+                        d.children = null;
+                    } else {
+                        d.children = d._children;
+                        d._children = null;
+                    }
+                    update();
+
+                    // Set selected node
+                    selectedNode = d;
+                    d3.selectAll("circle").attr("fill", "steelblue"); // Reset all nodes
+                    d3.select(this).select("circle").attr("fill", "red"); // Highlight selected node
+                });
+
+            node.append("circle")
+                .attr("r", 8);
+
+            node.append("text")
+                .attr("dx", 10)
+                .attr("dy", 5)
+                .text(d => d.data.name);
+        }
+
+        // Function to add a new node under selected node
+        function addNode() {
+            const nodeName = document.getElementById("nodeName").value;
+            if (!nodeName) return alert("Enter a node name!");
+
+            if (!selectedNode) {
+                alert("Click a node first to add a child under it!");
+                return;
+            }
+
+            // Add new node under the selected node
+            if (!selectedNode.data.children) {
+                selectedNode.data.children = [];
+            }
+            selectedNode.data.children.push({ name: nodeName, children: [] });
+
+            root = d3.hierarchy(data); // Update root structure
+            update(); // Redraw the tree
+            document.getElementById("nodeName").value = ""; // Clear input
+        }
+
+        // Initial render
+        update();
+    </script>
+
+</body>
+</html>
